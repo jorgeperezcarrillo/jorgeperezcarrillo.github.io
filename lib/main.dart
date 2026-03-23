@@ -27,6 +27,8 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomePage(),
         '/sphib': (context) => SphibPage(),
         '/rocket': (context) => RocketPage(),
+        '/cnc': (context) => CncCustomPage(),
+        '/aprendido': (context) => AprendidoPage(),
         '/hibsim': (context) => HibsimPage(),
         '/sphib_details': (context) => SphibDetailsPage(),
         '/sphib_plans': (context) => SphibPlansPage(),
@@ -187,8 +189,10 @@ class _HomePageState extends State<HomePage> {
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                        Wrap(
+                          alignment: WrapAlignment.center,
+                          spacing: 16,
+                          runSpacing: 16,
                           children: [
                             ProjectCard(
                               title: 'SPHIB',
@@ -198,7 +202,6 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.pushNamed(context, '/sphib');
                               },
                             ),
-                            SizedBox(width: 16),
                             ProjectCard(
                               title: 'Cohete Experimental',
                               description: 'Cohete experimental',
@@ -207,13 +210,28 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.pushNamed(context, '/rocket');
                               },
                             ),
-                            SizedBox(width: 16),
                             ProjectCard(
                               title: 'HIBSIM',
                               description: 'Simulador de motores cohete híbridos',
                               imagePath: 'assets/hibsim.jpg',
                               onTap: () {
                                 Navigator.pushNamed(context, '/hibsim', arguments: {'fromSphib': false});
+                              },
+                            ),
+                            ProjectCard(
+                              title: 'CNC Custom',
+                              description: 'CNC rotativa de 3 ejes',
+                              imagePath: 'assets/cnc_custom.jpg',
+                              onTap: () {
+                                Navigator.pushNamed(context, '/cnc');
+                              },
+                            ),
+                            ProjectCard(
+                              title: 'Qué he aprendido construyendo',
+                              description: 'Reflexión y resumen sobre lo aprendido en el desarrollo de proyectos',
+                              imagePath: 'assets/aprendido_foto.jpg',
+                              onTap: () {
+                                Navigator.pushNamed(context, '/aprendido');
                               },
                             ),
                           ],
@@ -331,35 +349,75 @@ class _HomePageState extends State<HomePage> {
 class ProjectCard extends StatelessWidget {
   final String title;
   final String description;
-  final String imagePath;
+  final String? imagePath;
   final VoidCallback? onTap;
 
   const ProjectCard({
     Key? key,
     required this.title,
     required this.description,
-    required this.imagePath,
+    this.imagePath,
     this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final bool hasImage = imagePath != null && imagePath!.isNotEmpty;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Card(
         elevation: 4,
-        child: Container(
+        child: SizedBox(
           width: 200,
           height: 300,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                ),
+                child: hasImage
+                    ? Image.asset(
+                        imagePath!,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF323B4A),
+                              Color(0xFF4E5A6B),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                        ),
+                        child: Center(
+                          child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.menu_book_rounded,
+                                  size: 56,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(height: 12),
+                                Text(
+                                  'Texto y reflexión',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
               ),
               Padding(
                 padding: EdgeInsets.all(8.0),
@@ -368,7 +426,10 @@ class ProjectCard extends StatelessWidget {
                   children: [
                     Text(
                       title,
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(height: 4),
                     Text(
@@ -385,11 +446,11 @@ class ProjectCard extends StatelessWidget {
     );
   }
 }
-
 class SphibPage extends StatefulWidget {
   @override
   _SphibPageState createState() => _SphibPageState();
 }
+
 
 class _SphibPageState extends State<SphibPage> {
   late VideoPlayerController _controllerSection0;
@@ -2101,7 +2162,369 @@ class _RocketEnginePlanPageState extends State<RocketEnginePlanPage> {
     );
   }
 }
+class CncCustomPage extends StatelessWidget {
+  const CncCustomPage({Key? key}) : super(key: key);
 
+  Widget _buildSection(
+    BuildContext context, {
+    required String imagePath,
+    required String title,
+    required String text,
+  }) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+
+    return Container(
+      height: screenHeight,
+      child: Stack(
+        children: [
+          Image.asset(
+            imagePath,
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Container(
+                padding: EdgeInsets.all(24.0),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 16),
+                      Text(
+                        text,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isMobile = MediaQuery.of(context).size.width < 900;
+    final bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return Scaffold(
+      backgroundColor: Color(0xFF323B4A),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
+              child: Text(
+                'Inicio',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
+            SizedBox(width: 16),
+            TextButton(
+              onPressed: () {
+                Utils.launchURL(context, 'https://yourwebsite.com/cv.pdf');
+              },
+              child: Text(
+                'CV',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
+            SizedBox(width: 16),
+            TextButton(
+              onPressed: () {
+                Utils.launchURL(
+                  context,
+                  'https://www.linkedin.com/in/jorge-p%C3%A9rez-carrillo-698b92354/',
+                );
+              },
+              child: Text(
+                'LinkedIn',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
+            SizedBox(width: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
+              child: Text(
+                'Proyectos',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+      ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Column(
+              children: [
+                _buildSection(
+                  context,
+                  imagePath: 'assets/cnc_section1.jpg',
+                  title: 'CNC rotativa 3 ejes',
+                  text: 'Esta máquina surgió de la necesidad de mecanizar insertos de grafito para la tobera de la V2 del SPHIB. Es una cnc de 3 ejes que ahce uso de un dremel, sus ejes son: plato giratorio, carro, y tornillo sin fin, este ultimo es el que impulsa el dremel.',
+                ),
+                _buildSection(
+                  context,
+                  imagePath: 'assets/cnc_section2.jpg',
+                  title: 'Hardware y Electrónica "Custom"',
+                  text: 'En cuanto a la unidad de control, utilizo un ESP32 ejecutando FluidNC, la electrónica está ensamblada en una placa perforada que integra los tres drivers TMC2209. En cuanto al resto del hardware, está compuesta en su mayoría por piezas de una Ender3V2Neo que iba a deshechar, reutilzando así, su fuente, los steppers y los ejes.',
+                ),
+                _buildSection(
+                  context,
+                  imagePath: 'assets/cnc_section3.jpg',
+                  title: 'Scripts de automatizacion',
+                  text: 'Dado que FluidNC no soporta comandos de desbastado ni muchos otros, he recurrido al desarrollo y perfeccionamiento de un script de matlab con ayuda de inteligencia artifical para generar automaticamente el Gcode de la maquina según el perfil deseado en la pieza, ademas de las especificaciones del desbastado y acabado.',
+                ),
+                _buildSection(
+                  context,
+                  imagePath: 'assets/cnc_section4.jpg',
+                  title: 'Resultados y aplicaciones',
+                  text: 'La primera pieza hecha con esta CNC custom ha sido una sección convergente de una tobera(diseñada a ojo), para comprobar la estabilidad de la maquina y sus ejes, y la fiabilidad del gcode generado por el script de Matlab. Lastimosamente para la primera prueba de la máquina los comandos G02 y G03 fueron intercambiados en el script de ploteo de gcode (el cual uso para comprobar el gcode antes de enchufarlo a la maquina), y finalmente las trayectorias curvas quedaron en el sentido contrario :( , para las proximas piezas lo solucionaré ',
+                ),
+              ],
+            ),
+          ),
+          if (isMobile && isPortrait)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      'Para una mejor experiencia, por favor gira tu dispositivo a modo horizontal.',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+class AprendidoPage extends StatelessWidget {
+  const AprendidoPage({Key? key}) : super(key: key);
+
+  Widget _buildTextSection({
+    required BuildContext context,
+    required String title,
+    required String text,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 20.0),
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(24.0),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.85),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.75,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isMobile = !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+    final bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
+    return Scaffold(
+      backgroundColor: Color(0xFF323B4A),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
+              child: Text('Inicio', style: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
+            SizedBox(width: 16),
+            TextButton(
+              onPressed: () {
+                Utils.launchURL(context, 'https://yourwebsite.com/cv.pdf');
+              },
+              child: Text('CV', style: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
+            SizedBox(width: 16),
+            TextButton(
+              onPressed: () {
+                Utils.launchURL(context, 'https://www.linkedin.com/in/jorge-p%C3%A9rez-carrillo-698b92354/');
+              },
+              child: Text('LinkedIn', style: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
+            SizedBox(width: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/');
+              },
+              child: Text('Proyectos', style: TextStyle(color: Colors.black, fontSize: 16)),
+            ),
+          ],
+        ),
+      ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            physics: ClampingScrollPhysics(),
+            child: Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: 1100),
+                  child: Column(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.all(32.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.85),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Un resumen de que he aprendido desarrollando estos proyectos.',
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              '',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black87,
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 24),
+
+                      _buildTextSection(
+                        context: context,
+                        title: '',
+                        text: 'Sacando adelante proyectos como el SPHIB por mi cuenta he podido darme cuenta de que el grueso de trabajo no está solamente en la parte motor ,de lo que se supone que iba el proyecto. Sino que hay muchas otras partes esenciales del proyecto que requieren de mucho tiempo y recursos. Al tener que tocar tantas áreas muy distintas no siempre he podido centrarme tanto como me habría gustado en las partes críticas o las que mas me gustaban , como el motor. Además, cuando decisiones como el diseño de piezas, o cualquier otra cosa, dependen de una sola persona, algunos errores tardan demasiado en ser detectados, por lo que se arrastran durante demasiado tiempo, lo cual conlleva mayores costes y tiempo necesario para arreglarlo. Finalmente, tras todos los proyectos, y sobretodo el SPHIB, he llegado a la conclusión de que este tipo de proyectos saldrían mejor hechos en equipo, ya no solo por la división de trabajo, que también, si no porque seguramente muchos de los errores tontos que he cometido podrían haber sido detectados antes bajo el criterio de mas personas, no sólo mi criterio, que en un inicio puede ser erroneo. Además que podrían haber llegado mucho mas lejos, y en menos tiempo. Dicho esto, y dado que sigo a varios y puedo observar cómo son, si en mi universidad hubiera un club de cohetería, probablemente me habría unido desde el principio, quitándome muchos de estos problemas problemas. \n\n\n Aún así, creo que desarrollar estos proyectos por mi cuenta me ha hecho aprender mucho como es el desarrollo de un proyecto así partiendo desde 0, desde la investigación inicial, cálculos, diseños, y sobretodo testeo e iteración hasta obtener los resultados deseados. He aprendido también a analizar mejor los problemas para saber de donde parten y como solucionarlos de la forma que considero más óptima. Además, he aprendido perseverancia, aunque el proyecto no avance o arrastre un error desde el inicio y tenga que rediseñar y rehacer gran parte del trabajo. Todo ello mientras los intento llevar a cabo a la vez que la universidad, y gestiono los recursos de los que dispongo. \n\n\n En general, aunque evidentemente no son proyectos al nivel de la NASA :v, dadas las circunstancias, me han servido para entender mejor cómo se desarrolla un proyecto desde cero, aunque quiza existan formas mas óptimas por descubrir.',
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          if (isMobile && isPortrait)
+            Positioned.fill(
+              child: Container(
+                color: Colors.black.withOpacity(0.5),
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Text(
+                      'Para una mejor experiencia, por favor gira tu dispositivo a modo horizontal.',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
 class RocketPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

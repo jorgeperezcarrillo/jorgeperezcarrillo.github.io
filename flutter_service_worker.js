@@ -3,10 +3,16 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 
-const RESOURCES = {"assets/AssetManifest.bin": "c3bd4a0e2d17aa7d8711530d98b4a9ff",
-"assets/AssetManifest.bin.json": "41c605ad20796c25fd834182fed3db7a",
-"assets/AssetManifest.json": "b0fbeb2c71f52b8fe69a060ad95bb1c8",
+const RESOURCES = {"assets/AssetManifest.bin": "266718dcc9334103ed48685277a39361",
+"assets/AssetManifest.bin.json": "4ef462dd4d3cf6448df7d0433b281b04",
+"assets/AssetManifest.json": "c398e4791c7158ab97245908c995a40c",
+"assets/assets/aprendido_foto.jpg": "349cd19033f30430c2834de25c17bb9d",
 "assets/assets/background.jpg": "a8248dd7968df7c25b17ffab1ba6749c",
+"assets/assets/cnc_custom.jpg": "dbead6def6695ba20353e4277dc47ca5",
+"assets/assets/cnc_section1.jpg": "dbead6def6695ba20353e4277dc47ca5",
+"assets/assets/cnc_section2.jpg": "2f69bd24bb57c5e41ae9c035d8299a1e",
+"assets/assets/cnc_section3.jpg": "43d6e8419f7322da707c73d812f62735",
+"assets/assets/cnc_section4.jpg": "4a43b3b78795003cd008984bc11c8005",
 "assets/assets/cv.pdf": "5601bcc7e6bc56b0b68b2eed47a3f80f",
 "assets/assets/fondo_HEM.jpg": "b900c69662a37cbaaf0937af6fff6427",
 "assets/assets/hibsim.jpg": "46bcbdcba56ee2ed5bcb80b8b00ad8f2",
@@ -57,14 +63,14 @@ const RESOURCES = {"assets/AssetManifest.bin": "c3bd4a0e2d17aa7d8711530d98b4a9ff
 "canvaskit/skwasm.wasm": "39dd80367a4e71582d234948adc521c0",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
 "flutter.js": "83d881c1dbb6d6bcd6b42e274605b69c",
-"flutter_bootstrap.js": "511b83a41b2dc793c9e4498dcc7996c1",
+"flutter_bootstrap.js": "82a42fb0349b51e21ba3000cc490c5d1",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "index.html": "007410a6cd88da43d70c2f54502e66b5",
 "/": "007410a6cd88da43d70c2f54502e66b5",
-"main.dart.js": "b138c1c7bc3c3482e95ef962e5741adc",
+"main.dart.js": "8bf75367fc178d50404d581a49f31e33",
 "manifest.json": "67b1d1f5a0772f8a3e21fcb5a95bdb0d",
 "version.json": "9e28a6fb62e19e020fc3634559213e4e"};
 // The application shell files that are downloaded before a service worker can
